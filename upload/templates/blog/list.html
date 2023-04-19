@@ -1,0 +1,129 @@
+
+{% extends "blog/base.html" %}
+{% load static %}
+{% load ratings %}
+{% load base_tags %}
+{% load humanize %}
+
+{% block main %}
+         <!-- Page Header-->
+        <header class="masthead" style="background-image: url('{% static "blog/assets/img/home-bg.jpg" %}')">
+            <div class="container position-relative px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <div class="site-heading">
+                            <h3>معرفی کتاب </h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <!-- Main Content-->
+        
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
+                   {% block header %}       {% endblock  %}
+                
+                    {% popular_articles %}
+
+                <div id="hot">
+                    {% hot_articles %}
+                </div>
+
+                    {% for  article in   object_list  %}
+                    <!-- Post preview-->
+                    <div class="post-preview">
+                        <a href="{% url 'blog:detail' article.slug %}">
+                            <h2 class="post-title">{{ article.title }}
+                            {% if article.is_special %}
+                                <span class='badge badge-danger'style='font-size:14px;'>ویژه</span>
+                            {% endif %}
+                            </h2>
+                            <div> {% ratings article  %} </div>
+                            <h4 class="post-subtitle">{{ article.description|striptags|truncatewords:30 }}</h4>
+                        </a>
+                        <p class="post-meta">
+                            نوشته شده توسط
+                            <a href="{% url 'blog:author' article.author %}">{{ article.author.get_full_name }} </a>
+                            {{ article.publish|naturaltime }}
+                        </p>
+                        <div>
+                        {% for cat in article.category.active %}
+
+                            <a href="{% url 'blog:category' cat.slug %}"> {{ cat.title }}</a>
+                       
+                        {% endfor %}
+                        </div>
+                        <div> بازدیدها:{{ article.hits.count }} </div>
+                    </div>
+                
+                    {% empty  %}
+                    <p>
+                        متاسفانه محتوایی برای نمایش وجود ندارد.
+                    </p>
+                    {% endfor %}
+                  
+                     <!-- Pager-->
+                   {% if is_paginated %}
+                    <div class='clearfix pager-botton'>
+                   {% if  page_obj.has_previous %}
+                      <div class="d-flex justify-content-end mb-4 ml-3"><a class="btn btn-primary text-uppercase" href="{% block previous_page_url %}{% endblock %}">پست های جدید </a>
+
+
+                   {% endif %}
+                   {% if  page_obj.has_next %}
+                 <a class="btn btn-primary text-uppercase" href="{% block next_page_url %}{% endblock %}">پست های قدیمی </a>
+
+                   {% endif %}
+                    </div>
+                    
+                    {% else %}
+                    {% endif %}
+                    
+                </div>
+            </div>
+        </div>
+      
+        {% endblock %}
+        <!-- Footer-->
+        <footer class="border-top">
+            <div class="container px-4 px-lg-5">
+                <div class="row gx-4 gx-lg-5 justify-content-center">
+                    <div class="col-md-10 col-lg-8 col-xl-7">
+                        <ul class="list-inline text-center">
+                            <li class="list-inline-item">
+                                <a href="#!">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-twitter fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#!">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-facebook-f fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a href="#!">
+                                    <span class="fa-stack fa-lg">
+                                        <i class="fas fa-circle fa-stack-2x"></i>
+                                        <i class="fab fa-github fa-stack-1x fa-inverse"></i>
+                                    </span>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="small text-center text-muted fst-italic">Copyright &copy; Your Website 2022</div>
+                    </div>
+                </div>
+            </div>
+        </footer>
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="{% static '/blog/js/scripts.js' %}"></script>
+     

@@ -1,0 +1,53 @@
+{% extends "registration/base.html" %}
+{% load crispy_forms_tags %}
+
+{% block  title%}
+      لیست مقالات                
+{% endblock  %}
+</h1>
+
+<p>{{ user.get_full_name }}</p>
+
+{% block main %}
+<div class='col-md-12'>
+   <div class='card card-primary'>
+      <div class='card-header'>
+         <h3 class='card-title mb-0 float-left'>افزودن مقاله </h3>
+      </div>
+      <div class='card-body'>
+         <form method='post' enctype='multipart/form-data'>
+            {% csrf_token %}
+                   {% if not user.is_superuser %}
+                  <div class='col-6'>
+                     <div id='div_id_status' class='form-group'>
+                        <label for='id_status' class='requiredField'>
+                            وضعیت <span class='asteriskField'>*</span>
+                            </label>
+                                 <div class=''>
+                                    <select name='status' class='select form-control'
+                                       required='' id='id_status'>
+                                       <option value="">--------</option>
+                                       <option value="d">پیش نویس</option>
+                                       <option value="i">ارسال برای ادمین</option>
+                                    </select>
+                              </div>
+                         </div>
+                    </div>
+
+                  {% endif %}
+               {{form|crispy}}
+               <button class='btn btn-success' > 
+                 ارسال مقاله 
+
+               </button>
+               {% if  user.is_superuser and request.resolver_match.kwargs.pk %}
+                   <a href="{% url 'account:article-delete' request.resolver_match.kwargs.pk  %}" class='btn btn-danger'>  
+                  حذف 
+               </a>
+               
+               {% else %}
+               {% endif %}
+         </form>
+</div>
+</div>
+{% endblock  %}

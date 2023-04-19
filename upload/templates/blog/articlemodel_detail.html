@@ -1,0 +1,63 @@
+{% extends "blog/base.html" %}
+{% load comment_tags %}  
+{% load ratings %}
+{% load humanize %}
+{% load base_tags %}
+{% block title %} 
+     {{ object.title }}
+{% endblock  %}
+
+{% block main %}
+        <!-- Page Header-->
+            <header class="masthead" style="background-image: url('{{ object.thumbnail.url }}')">
+                <div class="container position-relative px-4 px-lg-5">
+                    <div class="row gx-4 gx-lg-5 justify-content-center">
+                        <div class="col-md-10 col-lg-8 col-xl-7">
+                            
+                            <div class="site-heading">
+                                <h1>{{ object.title }}</h1>
+                                {% if article.is_special %}
+                                    <span class='badge badge-danger'
+                                    style='font-size:14px;'>ویژه</span>
+                                <!-- {% else %} -->
+                                {% endif %}
+                            <time> {{ object.publish|naturaltime }} </time> 
+                            <div> {% ratings object %} </div>  
+                            <div> بازدیدها:{{ object.hits.count }} </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </header>       
+            <!-- Post Content-->
+            <article class="mb-4">
+                <div class="container px-4 px-lg-5 text-justify">
+                    <div class="row gx-4 gx-lg-5 justify-content-center text-justify">
+                        {% popular_articles %}
+                            
+                        <div id="hot">
+                            {% hot_articles %}
+                        </div>
+                        
+                            
+                    {% if object.is_special %}
+
+                            {% if  user.is_athenticated and user.is_special_user or user == object.author or user.is_superuser %}
+                            {{ object.description|linebreaks }}
+                            
+                            {% else %}
+                                <p class='warning'>این مقاله ویژه است و برای مشاهده آن باید <a class='alert-link' href='#'>اشتراک ویژه </a>تهیه کنید</p>
+                            {% endif %}
+                   {% else %}
+
+                            {{ object.description|linebreaks }}
+
+                    {% endif %} 
+                    </div>
+
+                    
+                        </div>
+                    </div>
+        
+            </article>
+            {% endblock %}

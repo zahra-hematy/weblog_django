@@ -1,0 +1,30 @@
+
+
+
+.alert-validate::before {
+
+    direction: rtl !important ;
+    text-align: right !important ;
+
+}
+body {
+
+    direction: rtl !important ;
+    text-align: right !important ;
+
+}
+
+.login100-form {
+    width: 100%;
+    direction: rtl;
+    background: rgb(182, 180, 177);
+}
+
+.txt{
+
+    text-align: right !important ;
+
+}
+.errors{
+    color: red;
+}
